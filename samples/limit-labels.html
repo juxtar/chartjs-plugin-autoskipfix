@@ -1,0 +1,52 @@
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>ChartJS Draggable Annotations</title>
+</head>
+<body>
+    <div style="width: 75%">
+        <canvas id="canvas"></canvas>
+    </div>
+    <script src="http://unpkg.com/chart.js@2.9.3/dist/Chart.js"></script>
+    <script src="../dist/chartjs-plugin-autoskipfix.js"></script>
+    <script>
+        var randomScalingFactor = function() {
+            return (Math.random() > 0.5 ? 1.0 : -1.0) * Math.round(Math.random() * 100);
+        };
+
+        var ctx = document.querySelector("#canvas").getContext("2d");
+
+        window.chart = new Chart(ctx, {
+            type: "line",
+            data: {
+                labels: [...Array(201).keys()].map(i => i/2 + "ms"),
+                datasets: [
+                    {
+                        type: "line",
+                        label: "Dataset 1",
+                        borderColor: 'blue',
+                        borderWidth: 1,
+                        pointRadius: 0,
+                        fill: false,
+                        data: [...Array(201).keys()].map(i => randomScalingFactor())
+                    }
+                ]
+            },
+            options: {
+                scales: {
+                    xAxes: [
+                        {
+                            ticks: {
+                                autoSkip: true,
+                                maxTicksLimit: 10,
+                            }
+                        }
+                    ]
+                }
+            }
+        });
+    </script>
+</body>
+</html>
