@@ -8,7 +8,7 @@
     "watch": "rollup -c -w"
   },
   "keywords": [],
-  "author": "",
+  "author": "juxtar",
   "license": "ISC",
   "peerDependencies": {
     "chart.js": "^2.9.3"
