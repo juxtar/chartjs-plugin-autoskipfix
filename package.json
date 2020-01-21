@@ -2,9 +2,10 @@
   "name": "chartjs-plugin-autoskipfix",
   "version": "1.0.0",
   "description": "",
-  "main": "index.js",
+  "main": "dist/chartjs-plugin-autoskipfix.js",
   "scripts": {
-    "build": "rollup -c"
+    "build": "rollup -c",
+    "watch": "rollup -c -w"
   },
   "keywords": [],
   "author": "",
