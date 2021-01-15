@@ -24,25 +24,30 @@
       });
     }
 
-    function AutoSkipFixPlugin(Chart) {
-      Chart.Scale.prototype._autoSkip = function (ticks) {
-        var me = this;
-        var tickOpts = me.options.ticks;
-        var axisLength = me._length;
-        var ticksLimit = tickOpts.maxTicksLimit || axisLength / me._tickSize() + 1;
-        var spacing = Math.max((ticks.length - 1) / ticksLimit, 1);
-        return skip(ticks, spacing).reduce(function (list, tick) {
-          if (tick._index != null) list.push(tick);
-          return list;
-        }, []);
-      };
+    function autoskip(ticks) {
+      var me = this;
+      var tickOpts = me.options.ticks;
+      var axisLength = me._length;
+      var ticksLimit = tickOpts.maxTicksLimit || axisLength / me._tickSize() + 1;
+      var spacing = Math.max((ticks.length - 1) / ticksLimit, 1);
+      return skip(ticks, spacing).reduce(function (list, tick) {
+        if (tick._index != null) list.push(tick);
+        return list;
+      }, []);
+    }
 
+    function AutoSkipFixPlugin() {
       return {
-        id: 'autoskipfix'
+        id: 'autoskipfix',
+        beforeUpdate: function beforeUpdate(chartInstance) {
+          Object.keys(chartInstance.scales).forEach(function (scale) {
+            return chartInstance.scales[scale]._autoSkip = autoskip;
+          });
+        }
       };
     }
 
-    var autoskipfixPlugin = AutoSkipFixPlugin(Chart);
+    var autoskipfixPlugin = AutoSkipFixPlugin();
     Chart.pluginService.register(autoskipfixPlugin);
 
     return autoskipfixPlugin;

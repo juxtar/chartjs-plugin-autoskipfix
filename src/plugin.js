@@ -17,23 +17,26 @@ function skip(ticks, spacing) {
     });
 }
 
-export function AutoSkipFixPlugin(Chart) {
-    Chart.Scale.prototype._autoSkip = function(ticks) {
-        var me = this;
-        var tickOpts = me.options.ticks;
-        var axisLength = me._length;
-        var ticksLimit = tickOpts.maxTicksLimit || axisLength / me._tickSize() + 1;
-        var spacing = Math.max((ticks.length - 1) / ticksLimit, 1);
+function autoskip(ticks) {
+    var me = this;
+    var tickOpts = me.options.ticks;
+    var axisLength = me._length;
+    var ticksLimit = tickOpts.maxTicksLimit || axisLength / me._tickSize() + 1;
+    var spacing = Math.max((ticks.length - 1) / ticksLimit, 1);
 
-        return skip(ticks, spacing)
-                .reduce((list, tick) => {
-                    if (tick._index != null)
-                        list.push(tick);
-                    return list;
-                }, []);
-    };
+    return skip(ticks, spacing)
+            .reduce((list, tick) => {
+                if (tick._index != null)
+                    list.push(tick);
+                return list;
+            }, []);
+}
 
+export function AutoSkipFixPlugin() {
     return {
-        id: 'autoskipfix'
+        id: 'autoskipfix',
+        beforeUpdate: function(chartInstance) {
+            Object.keys(chartInstance.scales).forEach(scale => chartInstance.scales[scale]._autoSkip = autoskip);
+        }
     };
 };
